@@ -1,5 +1,6 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   entry: './src/index.js',
@@ -7,6 +8,9 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
     filename: 'bundle.js'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
   devServer: {
     contentBase: './build'
@@ -21,14 +25,18 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       }
     ]
   },
   devtool: 'inline-source-map',
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'tailwind.css'
+    }),
     new HtmlWebpackPlugin({
-      template: path.resolve('./index.html')
+      template: path.resolve('./public/index.html'),
+      favicon: 'public/favicon.ico'
     })
   ]
-};
+}
